@@ -10,7 +10,13 @@ public class CorsConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry oRegistry) {
         oRegistry.addMapping("/api/**")
-                .allowedOrigins("http://localhost:4200")   // Angular dev server
+                // Usa padrões para aceitar localhost (dev) e qualquer subdominio do Railway (prod).
+                // allowedOriginPatterns (em vez de allowedOrigins) permite wildcards seguros.
+                .allowedOriginPatterns(
+                        "http://localhost:4200",
+                        "https://*.up.railway.app",
+                        "https://*.railway.app"
+                )
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(false)
