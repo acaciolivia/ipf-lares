@@ -216,6 +216,13 @@ public class EnderecoService {
 
                     double dDistanciaArredondada = Math.round(dDistancia * 100.0) / 100.0;
 
+                    // Converte os membros vinculados ao endereço para que o card
+                    // exibido na listagem mostre nome, função e telefone.
+                    List<MembroDTO> lMembrosDto = oEndereco.getLMembros()
+                            .stream()
+                            .map(this::membroToDTO)
+                            .collect(Collectors.toList());
+
                     return new EnderecoProximoDTO(
                             oEndereco.getNId(),
                             oEndereco.getSCep(),
@@ -227,7 +234,8 @@ public class EnderecoService {
                             oEndereco.getSEstado(),
                             oEndereco.getDLatitude(),
                             oEndereco.getDLongitude(),
-                            dDistanciaArredondada
+                            dDistanciaArredondada,
+                            lMembrosDto
                     );
                 })
                 .filter(oProximo -> dRaioKm == null || oProximo.getDDistanciaKm() <= dRaioKm)

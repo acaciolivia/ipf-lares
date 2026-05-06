@@ -3,17 +3,20 @@ package com.ipfnoslares.dto;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.List;
+
 /**
  * DTO de resposta para a busca por endereços próximos.
- * Contém todos os campos do endereço mais a distância calculada.
+ * Contém todos os campos do endereço, a lista de membros vinculados
+ * e a distância calculada em quilômetros.
  *
  * @JsonAutoDetect + @JsonProperty: mesma estratégia dos demais DTOs
  * para evitar conflito entre getters em Hungarian notation e nomes JSON.
  */
 @JsonAutoDetect(
-        fieldVisibility   = JsonAutoDetect.Visibility.ANY,
-        getterVisibility  = JsonAutoDetect.Visibility.NONE,
-        setterVisibility  = JsonAutoDetect.Visibility.NONE,
+        fieldVisibility    = JsonAutoDetect.Visibility.ANY,
+        getterVisibility   = JsonAutoDetect.Visibility.NONE,
+        setterVisibility   = JsonAutoDetect.Visibility.NONE,
         isGetterVisibility = JsonAutoDetect.Visibility.NONE
 )
 public class EnderecoProximoDTO {
@@ -51,6 +54,10 @@ public class EnderecoProximoDTO {
     @JsonProperty("dDistanciaKm")
     private Double dDistanciaKm;
 
+    /** Membros vinculados ao endereço (nome, telefone, função). */
+    @JsonProperty("lMembros")
+    private List<MembroDTO> lMembros;
+
     // =========================================================
     // Construtores
     // =========================================================
@@ -61,7 +68,8 @@ public class EnderecoProximoDTO {
                                String sNumero, String sComplemento, String sBairro,
                                String sCidade, String sEstado,
                                Double dLatitude, Double dLongitude,
-                               Double dDistanciaKm) {
+                               Double dDistanciaKm,
+                               List<MembroDTO> lMembros) {
         this.nId            = nId;
         this.sCep           = sCep;
         this.sLogradouro    = sLogradouro;
@@ -73,6 +81,7 @@ public class EnderecoProximoDTO {
         this.dLatitude      = dLatitude;
         this.dLongitude     = dLongitude;
         this.dDistanciaKm   = dDistanciaKm;
+        this.lMembros       = lMembros;
     }
 
     // =========================================================
@@ -111,4 +120,7 @@ public class EnderecoProximoDTO {
 
     public Double getDDistanciaKm()               { return dDistanciaKm; }
     public void setDDistanciaKm(Double dDist)     { this.dDistanciaKm = dDist; }
+
+    public List<MembroDTO> getLMembros()              { return lMembros; }
+    public void setLMembros(List<MembroDTO> lMembros) { this.lMembros = lMembros; }
 }
