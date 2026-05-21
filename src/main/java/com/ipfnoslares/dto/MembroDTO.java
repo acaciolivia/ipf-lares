@@ -14,9 +14,9 @@ import java.time.LocalDateTime;
  * serialização quanto na desserialização.
  */
 @JsonAutoDetect(
-        fieldVisibility   = JsonAutoDetect.Visibility.ANY,
-        getterVisibility  = JsonAutoDetect.Visibility.NONE,
-        setterVisibility  = JsonAutoDetect.Visibility.NONE,
+        fieldVisibility    = JsonAutoDetect.Visibility.ANY,
+        getterVisibility   = JsonAutoDetect.Visibility.NONE,
+        setterVisibility   = JsonAutoDetect.Visibility.NONE,
         isGetterVisibility = JsonAutoDetect.Visibility.NONE
 )
 public class MembroDTO {
@@ -38,6 +38,14 @@ public class MembroDTO {
     @JsonProperty("sFuncao")
     private String sFuncao;
 
+    /** Indica se o telefone informado é WhatsApp. */
+    @JsonProperty("bWhatsapp")
+    private boolean bWhatsapp;
+
+    /** Indica se a pessoa autorizou ser contactada pela igreja. */
+    @JsonProperty("bAceitaContato")
+    private boolean bAceitaContato;
+
     /** ID do endereço vinculado (FK) — pode ser null */
     @JsonProperty("nEnderecoId")
     private Long nEnderecoId;
@@ -55,15 +63,18 @@ public class MembroDTO {
     public MembroDTO() {}
 
     public MembroDTO(Long nId, String sNome, String sTelefone, String sFuncao,
+                     boolean bWhatsapp, boolean bAceitaContato,
                      Long nEnderecoId,
                      LocalDateTime dtCriacao, LocalDateTime dtAtualizacao) {
-        this.nId           = nId;
-        this.sNome         = sNome;
-        this.sTelefone     = sTelefone;
-        this.sFuncao       = sFuncao;
-        this.nEnderecoId   = nEnderecoId;
-        this.dtCriacao     = dtCriacao;
-        this.dtAtualizacao = dtAtualizacao;
+        this.nId            = nId;
+        this.sNome          = sNome;
+        this.sTelefone      = sTelefone;
+        this.sFuncao        = sFuncao;
+        this.bWhatsapp      = bWhatsapp;
+        this.bAceitaContato = bAceitaContato;
+        this.nEnderecoId    = nEnderecoId;
+        this.dtCriacao      = dtCriacao;
+        this.dtAtualizacao  = dtAtualizacao;
     }
 
     // =========================================================
@@ -81,6 +92,12 @@ public class MembroDTO {
 
     public String getSFuncao()                    { return sFuncao; }
     public void setSFuncao(String sFuncao)        { this.sFuncao = sFuncao; }
+
+    public boolean isBWhatsapp()                  { return bWhatsapp; }
+    public void setBWhatsapp(boolean bWhatsapp)   { this.bWhatsapp = bWhatsapp; }
+
+    public boolean isBAceitaContato()             { return bAceitaContato; }
+    public void setBAceitaContato(boolean b)      { this.bAceitaContato = b; }
 
     public Long getNEnderecoId()                  { return nEnderecoId; }
     public void setNEnderecoId(Long nEnderecoId)  { this.nEnderecoId = nEnderecoId; }

@@ -71,6 +71,8 @@ public class MembroService {
                 .sNome(oDto.getSNome())
                 .sTelefone(oDto.getSTelefone())
                 .sFuncao(sFuncao)
+                .bWhatsapp(oDto.isBWhatsapp())
+                .bAceitaContato(oDto.isBAceitaContato())
                 .oEndereco(oEndereco)
                 .build();
 
@@ -103,6 +105,8 @@ public class MembroService {
                 .sNome(oDto.getSNome())
                 .sTelefone(oDto.getSTelefone())
                 .sFuncao(sFuncao)
+                .bWhatsapp(oDto.isBWhatsapp())
+                .bAceitaContato(oDto.isBAceitaContato())
                 .oEndereco(oEndereco)
                 .build();
 
@@ -145,6 +149,8 @@ public class MembroService {
                 oMembro.getSNome(),
                 oMembro.getSTelefone(),
                 oMembro.getSFuncao(),
+                oMembro.isBWhatsapp(),
+                oMembro.isBAceitaContato(),
                 oMembro.getOEndereco() != null ? oMembro.getOEndereco().getNId() : null,
                 oMembro.getDtCriacao(),
                 oMembro.getDtAtualizacao()

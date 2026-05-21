@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
  * Convenção de variáveis (Hungarian notation):
  *   n  = numérico (Long, Integer)
  *   s  = String
+ *   b  = boolean
  *   o  = Objeto
  *   dt = LocalDateTime
  */
@@ -32,6 +33,14 @@ public class Membro {
     @Column(name = "funcao", nullable = false, length = 50)
     private String sFuncao;
 
+    /** Indica se o número de telefone é WhatsApp (para abrir o app ao clicar). */
+    @Column(name = "whatsapp", nullable = false)
+    private boolean bWhatsapp;
+
+    /** Indica se a pessoa autorizou ser contactada pela igreja. */
+    @Column(name = "aceita_contato", nullable = false)
+    private boolean bAceitaContato;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "endereco_id")
     private Endereco oEndereco;
@@ -47,13 +56,15 @@ public class Membro {
 
     // Construtor privado — uso exclusivo do Builder
     private Membro(Builder oBuilder) {
-        this.nId           = oBuilder.nId;
-        this.sNome         = oBuilder.sNome;
-        this.sTelefone     = oBuilder.sTelefone;
-        this.sFuncao       = oBuilder.sFuncao;
-        this.oEndereco     = oBuilder.oEndereco;
-        this.dtCriacao     = oBuilder.dtCriacao;
-        this.dtAtualizacao = oBuilder.dtAtualizacao;
+        this.nId            = oBuilder.nId;
+        this.sNome          = oBuilder.sNome;
+        this.sTelefone      = oBuilder.sTelefone;
+        this.sFuncao        = oBuilder.sFuncao;
+        this.bWhatsapp      = oBuilder.bWhatsapp;
+        this.bAceitaContato = oBuilder.bAceitaContato;
+        this.oEndereco      = oBuilder.oEndereco;
+        this.dtCriacao      = oBuilder.dtCriacao;
+        this.dtAtualizacao  = oBuilder.dtAtualizacao;
     }
 
     // =========================================================
@@ -64,6 +75,8 @@ public class Membro {
     public String getSNome()                  { return sNome; }
     public String getSTelefone()              { return sTelefone; }
     public String getSFuncao()                { return sFuncao; }
+    public boolean isBWhatsapp()              { return bWhatsapp; }
+    public boolean isBAceitaContato()         { return bAceitaContato; }
     public Endereco getOEndereco()            { return oEndereco; }
     public LocalDateTime getDtCriacao()       { return dtCriacao; }
     public LocalDateTime getDtAtualizacao()   { return dtAtualizacao; }
@@ -100,6 +113,8 @@ public class Membro {
         private String sNome;
         private String sTelefone;
         private String sFuncao;
+        private boolean bWhatsapp;
+        private boolean bAceitaContato;
         private Endereco oEndereco;
         private LocalDateTime dtCriacao;
         private LocalDateTime dtAtualizacao;
@@ -123,6 +138,16 @@ public class Membro {
 
         public Builder sFuncao(String sFuncao) {
             this.sFuncao = sFuncao;
+            return this;
+        }
+
+        public Builder bWhatsapp(boolean bWhatsapp) {
+            this.bWhatsapp = bWhatsapp;
+            return this;
+        }
+
+        public Builder bAceitaContato(boolean bAceitaContato) {
+            this.bAceitaContato = bAceitaContato;
             return this;
         }
 
@@ -152,6 +177,8 @@ public class Membro {
                 "nId=" + nId +
                 ", sNome='" + sNome + '\'' +
                 ", sFuncao='" + sFuncao + '\'' +
+                ", bWhatsapp=" + bWhatsapp +
+                ", bAceitaContato=" + bAceitaContato +
                 ", nEnderecoId=" + (oEndereco != null ? oEndereco.getNId() : "null") +
                 '}';
     }

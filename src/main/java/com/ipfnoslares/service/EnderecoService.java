@@ -278,6 +278,8 @@ public class EnderecoService {
                 oMembro.getSNome(),
                 oMembro.getSTelefone(),
                 oMembro.getSFuncao(),
+                oMembro.isBWhatsapp(),
+                oMembro.isBAceitaContato(),
                 oMembro.getOEndereco() != null ? oMembro.getOEndereco().getNId() : null,
                 oMembro.getDtCriacao(),
                 oMembro.getDtAtualizacao()
