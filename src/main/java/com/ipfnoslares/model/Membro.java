@@ -41,6 +41,10 @@ public class Membro {
     @Column(name = "aceita_contato", nullable = false)
     private boolean bAceitaContato;
 
+    /** Indica se o membro esta desigrejado (afastado da igreja). */
+    @Column(name = "desigrejado", nullable = false)
+    private boolean bDesigrejado;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "endereco_id")
     private Endereco oEndereco;
@@ -62,6 +66,7 @@ public class Membro {
         this.sFuncao        = oBuilder.sFuncao;
         this.bWhatsapp      = oBuilder.bWhatsapp;
         this.bAceitaContato = oBuilder.bAceitaContato;
+        this.bDesigrejado   = oBuilder.bDesigrejado;
         this.oEndereco      = oBuilder.oEndereco;
         this.dtCriacao      = oBuilder.dtCriacao;
         this.dtAtualizacao  = oBuilder.dtAtualizacao;
@@ -77,6 +82,7 @@ public class Membro {
     public String getSFuncao()                { return sFuncao; }
     public boolean isBWhatsapp()              { return bWhatsapp; }
     public boolean isBAceitaContato()         { return bAceitaContato; }
+    public boolean isBDesigrejado()           { return bDesigrejado; }
     public Endereco getOEndereco()            { return oEndereco; }
     public LocalDateTime getDtCriacao()       { return dtCriacao; }
     public LocalDateTime getDtAtualizacao()   { return dtAtualizacao; }
@@ -115,6 +121,7 @@ public class Membro {
         private String sFuncao;
         private boolean bWhatsapp;
         private boolean bAceitaContato;
+        private boolean bDesigrejado;
         private Endereco oEndereco;
         private LocalDateTime dtCriacao;
         private LocalDateTime dtAtualizacao;
@@ -148,6 +155,11 @@ public class Membro {
 
         public Builder bAceitaContato(boolean bAceitaContato) {
             this.bAceitaContato = bAceitaContato;
+            return this;
+        }
+
+        public Builder bDesigrejado(boolean bDesigrejado) {
+            this.bDesigrejado = bDesigrejado;
             return this;
         }
 

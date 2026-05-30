@@ -46,6 +46,10 @@ public class MembroDTO {
     @JsonProperty("bAceitaContato")
     private boolean bAceitaContato;
 
+    /** Indica se o membro esta desigrejado (afastado). */
+    @JsonProperty("bDesigrejado")
+    private boolean bDesigrejado;
+
     /** ID do endereço vinculado (FK) — pode ser null */
     @JsonProperty("nEnderecoId")
     private Long nEnderecoId;
@@ -63,7 +67,7 @@ public class MembroDTO {
     public MembroDTO() {}
 
     public MembroDTO(Long nId, String sNome, String sTelefone, String sFuncao,
-                     boolean bWhatsapp, boolean bAceitaContato,
+                     boolean bWhatsapp, boolean bAceitaContato, boolean bDesigrejado,
                      Long nEnderecoId,
                      LocalDateTime dtCriacao, LocalDateTime dtAtualizacao) {
         this.nId            = nId;
@@ -72,6 +76,7 @@ public class MembroDTO {
         this.sFuncao        = sFuncao;
         this.bWhatsapp      = bWhatsapp;
         this.bAceitaContato = bAceitaContato;
+        this.bDesigrejado   = bDesigrejado;
         this.nEnderecoId    = nEnderecoId;
         this.dtCriacao      = dtCriacao;
         this.dtAtualizacao  = dtAtualizacao;
@@ -98,6 +103,9 @@ public class MembroDTO {
 
     public boolean isBAceitaContato()             { return bAceitaContato; }
     public void setBAceitaContato(boolean b)      { this.bAceitaContato = b; }
+
+    public boolean isBDesigrejado()               { return bDesigrejado; }
+    public void setBDesigrejado(boolean b)        { this.bDesigrejado = b; }
 
     public Long getNEnderecoId()                  { return nEnderecoId; }
     public void setNEnderecoId(Long nEnderecoId)  { this.nEnderecoId = nEnderecoId; }

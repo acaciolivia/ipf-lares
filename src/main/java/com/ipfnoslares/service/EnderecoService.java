@@ -280,6 +280,7 @@ public class EnderecoService {
                 oMembro.getSFuncao(),
                 oMembro.isBWhatsapp(),
                 oMembro.isBAceitaContato(),
+                oMembro.isBDesigrejado(),
                 oMembro.getOEndereco() != null ? oMembro.getOEndereco().getNId() : null,
                 oMembro.getDtCriacao(),
                 oMembro.getDtAtualizacao()
