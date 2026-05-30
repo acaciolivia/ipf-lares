@@ -49,6 +49,11 @@ public class Membro {
     @JoinColumn(name = "endereco_id")
     private Endereco oEndereco;
 
+    /** Grupo/célula ao qual o membro pertence — opcional (RN-001: no máximo 1). */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "grupo_id")
+    private Grupo oGrupo;
+
     @Column(name = "dt_criacao", updatable = false)
     private LocalDateTime dtCriacao;
 
@@ -68,6 +73,7 @@ public class Membro {
         this.bAceitaContato = oBuilder.bAceitaContato;
         this.bDesigrejado   = oBuilder.bDesigrejado;
         this.oEndereco      = oBuilder.oEndereco;
+        this.oGrupo         = oBuilder.oGrupo;
         this.dtCriacao      = oBuilder.dtCriacao;
         this.dtAtualizacao  = oBuilder.dtAtualizacao;
     }
@@ -84,6 +90,8 @@ public class Membro {
     public boolean isBAceitaContato()         { return bAceitaContato; }
     public boolean isBDesigrejado()           { return bDesigrejado; }
     public Endereco getOEndereco()            { return oEndereco; }
+    public Grupo getOGrupo()                  { return oGrupo; }
+    public void setOGrupo(Grupo oGrupo)       { this.oGrupo = oGrupo; }
     public LocalDateTime getDtCriacao()       { return dtCriacao; }
     public LocalDateTime getDtAtualizacao()   { return dtAtualizacao; }
 
@@ -123,6 +131,7 @@ public class Membro {
         private boolean bAceitaContato;
         private boolean bDesigrejado;
         private Endereco oEndereco;
+        private Grupo oGrupo;
         private LocalDateTime dtCriacao;
         private LocalDateTime dtAtualizacao;
 
@@ -165,6 +174,11 @@ public class Membro {
 
         public Builder oEndereco(Endereco oEndereco) {
             this.oEndereco = oEndereco;
+            return this;
+        }
+
+        public Builder oGrupo(Grupo oGrupo) {
+            this.oGrupo = oGrupo;
             return this;
         }
 

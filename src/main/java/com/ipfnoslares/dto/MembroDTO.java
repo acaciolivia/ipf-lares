@@ -54,6 +54,18 @@ public class MembroDTO {
     @JsonProperty("nEnderecoId")
     private Long nEnderecoId;
 
+    /** ID do grupo/célula ao qual o membro pertence — pode ser null (RN-001). */
+    @JsonProperty("nGrupoId")
+    private Long nGrupoId;
+
+    /** Nome do grupo (somente leitura, preenchido na resposta). */
+    @JsonProperty("sNomeGrupo")
+    private String sNomeGrupo;
+
+    /** Nome do líder do grupo (somente leitura, preenchido na resposta). */
+    @JsonProperty("sNomeLiderGrupo")
+    private String sNomeLiderGrupo;
+
     @JsonProperty("dtCriacao")
     private LocalDateTime dtCriacao;
 
@@ -70,16 +82,27 @@ public class MembroDTO {
                      boolean bWhatsapp, boolean bAceitaContato, boolean bDesigrejado,
                      Long nEnderecoId,
                      LocalDateTime dtCriacao, LocalDateTime dtAtualizacao) {
-        this.nId            = nId;
-        this.sNome          = sNome;
-        this.sTelefone      = sTelefone;
-        this.sFuncao        = sFuncao;
-        this.bWhatsapp      = bWhatsapp;
-        this.bAceitaContato = bAceitaContato;
-        this.bDesigrejado   = bDesigrejado;
-        this.nEnderecoId    = nEnderecoId;
-        this.dtCriacao      = dtCriacao;
-        this.dtAtualizacao  = dtAtualizacao;
+        this(nId, sNome, sTelefone, sFuncao, bWhatsapp, bAceitaContato, bDesigrejado,
+             nEnderecoId, null, null, null, dtCriacao, dtAtualizacao);
+    }
+
+    public MembroDTO(Long nId, String sNome, String sTelefone, String sFuncao,
+                     boolean bWhatsapp, boolean bAceitaContato, boolean bDesigrejado,
+                     Long nEnderecoId, Long nGrupoId, String sNomeGrupo, String sNomeLiderGrupo,
+                     LocalDateTime dtCriacao, LocalDateTime dtAtualizacao) {
+        this.nId              = nId;
+        this.sNome            = sNome;
+        this.sTelefone        = sTelefone;
+        this.sFuncao          = sFuncao;
+        this.bWhatsapp        = bWhatsapp;
+        this.bAceitaContato   = bAceitaContato;
+        this.bDesigrejado     = bDesigrejado;
+        this.nEnderecoId      = nEnderecoId;
+        this.nGrupoId         = nGrupoId;
+        this.sNomeGrupo       = sNomeGrupo;
+        this.sNomeLiderGrupo  = sNomeLiderGrupo;
+        this.dtCriacao        = dtCriacao;
+        this.dtAtualizacao    = dtAtualizacao;
     }
 
     // =========================================================
@@ -109,6 +132,15 @@ public class MembroDTO {
 
     public Long getNEnderecoId()                  { return nEnderecoId; }
     public void setNEnderecoId(Long nEnderecoId)  { this.nEnderecoId = nEnderecoId; }
+
+    public Long getNGrupoId()                     { return nGrupoId; }
+    public void setNGrupoId(Long nGrupoId)        { this.nGrupoId = nGrupoId; }
+
+    public String getSNomeGrupo()                 { return sNomeGrupo; }
+    public void setSNomeGrupo(String s)           { this.sNomeGrupo = s; }
+
+    public String getSNomeLiderGrupo()            { return sNomeLiderGrupo; }
+    public void setSNomeLiderGrupo(String s)      { this.sNomeLiderGrupo = s; }
 
     public LocalDateTime getDtCriacao()           { return dtCriacao; }
     public void setDtCriacao(LocalDateTime dt)    { this.dtCriacao = dt; }

@@ -4,6 +4,7 @@ import com.ipfnoslares.dto.MembroDTO;
 import com.ipfnoslares.model.Endereco;
 import com.ipfnoslares.model.Membro;
 import com.ipfnoslares.repository.EnderecoRepository;
+import com.ipfnoslares.repository.GrupoRepository;
 import com.ipfnoslares.repository.MembroRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,11 +24,14 @@ public class MembroService {
 
     private final MembroRepository oMembroRepository;
     private final EnderecoRepository oEnderecoRepository;
+    private final GrupoRepository oGrupoRepository;
 
     public MembroService(MembroRepository oMembroRepository,
-                         EnderecoRepository oEnderecoRepository) {
+                         EnderecoRepository oEnderecoRepository,
+                         GrupoRepository oGrupoRepository) {
         this.oMembroRepository   = oMembroRepository;
         this.oEnderecoRepository = oEnderecoRepository;
+        this.oGrupoRepository    = oGrupoRepository;
     }
 
     // =========================================================
@@ -67,6 +71,8 @@ public class MembroService {
                 ? oDto.getSFuncao()
                 : "Membro";
 
+        com.ipfnoslares.model.Grupo oGrupo = resolverGrupo(oDto.getNGrupoId());
+
         Membro oMembro = Membro.builder()
                 .sNome(oDto.getSNome())
                 .sTelefone(oDto.getSTelefone())
@@ -75,6 +81,7 @@ public class MembroService {
                 .bAceitaContato(oDto.isBAceitaContato())
                 .bDesigrejado(oDto.isBDesigrejado())
                 .oEndereco(oEndereco)
+                .oGrupo(oGrupo)
                 .build();
 
         Membro oSalvo = oMembroRepository.save(oMembro);
@@ -101,6 +108,8 @@ public class MembroService {
                 ? oDto.getSFuncao()
                 : "Membro";
 
+        com.ipfnoslares.model.Grupo oGrupo = resolverGrupo(oDto.getNGrupoId());
+
         Membro oAtualizado = Membro.builder()
                 .nId(nId)
                 .sNome(oDto.getSNome())
@@ -110,6 +119,7 @@ public class MembroService {
                 .bAceitaContato(oDto.isBAceitaContato())
                 .bDesigrejado(oDto.isBDesigrejado())
                 .oEndereco(oEndereco)
+                .oGrupo(oGrupo)
                 .build();
 
         Membro oSalvo = oMembroRepository.save(oAtualizado);
@@ -141,11 +151,24 @@ public class MembroService {
                 .orElseThrow(() -> new RuntimeException("Endereço não encontrado com id: " + nEnderecoId));
     }
 
+    /** Busca o Grupo pelo ID, retornando null se não informado (RN-001: opcional). */
+    private com.ipfnoslares.model.Grupo resolverGrupo(Long nGrupoId) {
+        if (nGrupoId == null) return null;
+        return oGrupoRepository.findById(nGrupoId)
+                .orElseThrow(() -> new RuntimeException("Grupo não encontrado com id: " + nGrupoId));
+    }
+
     // =========================================================
     // Conversão Entidade → DTO
     // =========================================================
 
     private MembroDTO toDTO(Membro oMembro) {
+        com.ipfnoslares.model.Grupo oGrupo = oMembro.getOGrupo();
+        Long nGrupoId        = oGrupo != null ? oGrupo.getNId()    : null;
+        String sNomeGrupo    = oGrupo != null ? oGrupo.getSNome()  : null;
+        String sNomeLiderGrp = (oGrupo != null && oGrupo.getOLider() != null)
+                ? oGrupo.getOLider().getSNome() : null;
+
         return new MembroDTO(
                 oMembro.getNId(),
                 oMembro.getSNome(),
@@ -155,6 +178,7 @@ public class MembroService {
                 oMembro.isBAceitaContato(),
                 oMembro.isBDesigrejado(),
                 oMembro.getOEndereco() != null ? oMembro.getOEndereco().getNId() : null,
+                nGrupoId, sNomeGrupo, sNomeLiderGrp,
                 oMembro.getDtCriacao(),
                 oMembro.getDtAtualizacao()
         );

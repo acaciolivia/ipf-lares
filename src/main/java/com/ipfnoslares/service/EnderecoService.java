@@ -273,6 +273,12 @@ public class EnderecoService {
 
     /** Converte um Membro em MembroDTO (sem referência circular ao endereço) */
     private MembroDTO membroToDTO(Membro oMembro) {
+        com.ipfnoslares.model.Grupo oGrupo = oMembro.getOGrupo();
+        Long nGrupoId        = oGrupo != null ? oGrupo.getNId()    : null;
+        String sNomeGrupo    = oGrupo != null ? oGrupo.getSNome()  : null;
+        String sNomeLiderGrp = (oGrupo != null && oGrupo.getOLider() != null)
+                ? oGrupo.getOLider().getSNome() : null;
+
         return new MembroDTO(
                 oMembro.getNId(),
                 oMembro.getSNome(),
@@ -282,6 +288,7 @@ public class EnderecoService {
                 oMembro.isBAceitaContato(),
                 oMembro.isBDesigrejado(),
                 oMembro.getOEndereco() != null ? oMembro.getOEndereco().getNId() : null,
+                nGrupoId, sNomeGrupo, sNomeLiderGrp,
                 oMembro.getDtCriacao(),
                 oMembro.getDtAtualizacao()
         );
