@@ -148,8 +148,20 @@ public class GrupoService {
         if (nLiderId == null) {
             throw new RuntimeException("O líder do grupo é obrigatório.");
         }
-        return oMembroRepository.findById(nLiderId)
+        Membro oLider = oMembroRepository.findById(nLiderId)
                 .orElseThrow(() -> new RuntimeException("Líder (membro) não encontrado: " + nLiderId));
+
+        // Regra: um Visitante não pode ser líder
+        if ("Visitante".equalsIgnoreCase(oLider.getSFuncao())) {
+            throw new RuntimeException(
+                    "Um Visitante não pode ser líder de um grupo. Altere a função do membro antes de associá-lo.");
+        }
+        // Regra: um Desigrejado não pode ser líder
+        if (oLider.isBDesigrejado()) {
+            throw new RuntimeException(
+                    "Um membro Desigrejado não pode ser líder de um grupo.");
+        }
+        return oLider;
     }
 
     private GrupoDTO toDTO(Grupo oGrupo, boolean bIncluirMembros) {

@@ -108,6 +108,19 @@ public class MembroService {
                 ? oDto.getSFuncao()
                 : "Membro";
 
+        // Regra: se este membro é líder de algum grupo, não pode virar Visitante nem Desigrejado.
+        boolean bVaiVirarVisitante  = "Visitante".equalsIgnoreCase(sFuncao);
+        boolean bVaiVirarDesigrejado = oDto.isBDesigrejado();
+        if ((bVaiVirarVisitante || bVaiVirarDesigrejado)
+                && oGrupoRepository.isMembroLiderDeAlgumGrupo(nId)) {
+            String sMotivo = bVaiVirarVisitante
+                    ? "marcado como Visitante"
+                    : "marcado como Desigrejado";
+            throw new RuntimeException(
+                    "Este membro é líder de um grupo e não pode ser " + sMotivo
+                            + ". Troque o líder do grupo antes de alterar.");
+        }
+
         com.ipfnoslares.model.Grupo oGrupo = resolverGrupo(oDto.getNGrupoId());
 
         Membro oAtualizado = Membro.builder()
