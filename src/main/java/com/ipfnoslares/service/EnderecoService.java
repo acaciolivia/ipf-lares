@@ -7,6 +7,8 @@ import com.ipfnoslares.dto.ViaCepResponseDTO;
 import com.ipfnoslares.model.Endereco;
 import com.ipfnoslares.model.Membro;
 import com.ipfnoslares.repository.EnderecoRepository;
+import com.ipfnoslares.repository.GrupoRepository;
+import com.ipfnoslares.repository.MembroRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -25,13 +27,19 @@ public class EnderecoService {
     private static final Logger oLogger = LoggerFactory.getLogger(EnderecoService.class);
 
     private final EnderecoRepository oEnderecoRepository;
+    private final MembroRepository   oMembroRepository;
+    private final GrupoRepository    oGrupoRepository;
     private final ViaCepService oViaCepService;
     private final GeocodingService oGeocodingService;
 
     public EnderecoService(EnderecoRepository oEnderecoRepository,
+                           MembroRepository oMembroRepository,
+                           GrupoRepository oGrupoRepository,
                            ViaCepService oViaCepService,
                            GeocodingService oGeocodingService) {
         this.oEnderecoRepository = oEnderecoRepository;
+        this.oMembroRepository   = oMembroRepository;
+        this.oGrupoRepository    = oGrupoRepository;
         this.oViaCepService      = oViaCepService;
         this.oGeocodingService   = oGeocodingService;
     }
@@ -160,11 +168,28 @@ public class EnderecoService {
 
     @Transactional
     public void excluir(Long nId) {
-        if (!oEnderecoRepository.existsById(nId)) {
-            throw new RuntimeException("Endereço não encontrado com id: " + nId);
+        Endereco oEndereco = oEnderecoRepository.findById(nId)
+                .orElseThrow(() -> new RuntimeException("Endereço não encontrado com id: " + nId));
+
+        // Antes de excluir, verifica se algum membro vinculado é líder de algum grupo.
+        // Se for, bloqueia (senão o grupo ficaria sem líder — RN-002).
+        for (Membro oMembro : oEndereco.getLMembros()) {
+            if (oGrupoRepository.isMembroLiderDeAlgumGrupo(oMembro.getNId())) {
+                throw new RuntimeException(
+                        "Não é possível excluir este cadastro: " + oMembro.getSNome()
+                                + " é líder de um grupo/célula. Troque o líder do grupo antes de excluir.");
+            }
         }
+
+        // Remove primeiro os membros vinculados (a FK membros.endereco_id seria
+        // violada se tentássemos deletar o endereço diretamente).
+        for (Membro oMembro : new java.util.ArrayList<>(oEndereco.getLMembros())) {
+            oMembroRepository.delete(oMembro);
+        }
+
         oEnderecoRepository.deleteById(nId);
-        oLogger.info("Endereço excluído: id={}", nId);
+        oLogger.info("Endereço excluído: id={} ({} membros removidos)",
+                nId, oEndereco.getLMembros().size());
     }
 
     // =========================================================

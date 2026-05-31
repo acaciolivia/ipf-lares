@@ -95,7 +95,12 @@ public class EnderecoController {
             oEnderecoService.excluir(id);
             return ResponseEntity.noContent().build();
         } catch (RuntimeException oEx) {
-            return ResponseEntity.notFound().build();
+            String sMsg = oEx.getMessage() == null ? "" : oEx.getMessage();
+            // "Endereço não encontrado" → 404; demais erros (líder de grupo, etc.) → 400 com mensagem.
+            if (sMsg.toLowerCase().contains("não encontrado")) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(sMsg);
+            }
+            return ResponseEntity.badRequest().body(sMsg);
         }
     }
 

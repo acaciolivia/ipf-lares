@@ -149,6 +149,12 @@ public class MembroService {
         if (!oMembroRepository.existsById(nId)) {
             throw new RuntimeException("Membro não encontrado com id: " + nId);
         }
+        // Bloqueia exclusão se o membro é líder de algum grupo (RN-002).
+        if (oGrupoRepository.isMembroLiderDeAlgumGrupo(nId)) {
+            throw new RuntimeException(
+                    "Não é possível excluir: este membro é líder de um grupo/célula. "
+                            + "Troque o líder do grupo antes de excluir.");
+        }
         oMembroRepository.deleteById(nId);
         oLogger.info("Membro excluído: id={}", nId);
     }

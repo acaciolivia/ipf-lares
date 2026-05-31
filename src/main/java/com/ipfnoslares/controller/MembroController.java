@@ -92,7 +92,11 @@ public class MembroController {
             oMembroService.excluir(id);
             return ResponseEntity.noContent().build();
         } catch (RuntimeException oEx) {
-            return ResponseEntity.notFound().build();
+            String sMsg = oEx.getMessage() == null ? "" : oEx.getMessage();
+            if (sMsg.toLowerCase().contains("não encontrado")) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(sMsg);
+            }
+            return ResponseEntity.badRequest().body(sMsg);
         }
     }
 }
